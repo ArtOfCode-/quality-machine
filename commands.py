@@ -11,11 +11,16 @@ def command_help(event: dict, args: list) -> CommandResponse:
     return CommandResponse(True, "I'm a bot that detects low-quality contributions using machine-learning algorithms.")
 
 
+def command_alive(event: dict, args: list) -> CommandResponse:
+    return CommandResponse(True, "You'll have to try harder than that to kill me.")
+
+
 # This dict lists commands by their name and defines their executable methods. Each key should be a str of the command
 # name, and each value should be a typing.Callable[[dict, list], CommandResponse], where the dict argument is the data
 # field of a ChatExchange.chatexchange.events.Event and the list field is the arguments to the command as sent in chat.
 command_dict = {
-    'help': command_help
+    'help': command_help,
+    'alive': command_alive
 }
 
 
