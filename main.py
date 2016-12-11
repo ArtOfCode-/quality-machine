@@ -16,7 +16,7 @@ def main():
     cprint("Success.", "green")
 
     chat.watch_room(chat_client, config.get('control_room'), chat.process_event, config)
-    cprint("Watching socket. Entering main event loop.", "blue")
+    cprint("Socket watcher started for {}.".format(config.get('control_room')), "blue")
 
     values, labels = load_classification_data(config.get("class_data_file"))
     clf = svm.SVC()
@@ -24,21 +24,26 @@ def main():
 
     chat.send_message(config.get('control_room'), "Started with {} classification records loaded. "
                       "Running on {}.".format(len(labels), config.get('location')))
-    cprint("{} classifier records loaded.", "blue", attrs=['bold'])
+    cprint("{} classifier records loaded.".format(len(labels)), "blue", attrs=['bold'])
 
     ws = websocket.create_connection("ws://qa.sockets.stackexchange.com/")
     ws.send("97-questions-newest")
+    cprint("Watching websocket.", "blue")
 
     while True:
         received = ws.recv()
+
+        print(colored("WS frame received: ", "yellow", attrs=['bold']) + received[0:100] + "...")
+
         json_frame = json.loads(received)
         action_name = json_frame['action']
-        frame_data = json.loads(json_frame['data'])
+        if action_name == "hb":
+            frame_data = json_frame['data']
+        else:
+            frame_data = json.loads(json_frame['data'])
 
-        print(colored("WS frame received: ", "yellow", attrs=['bold']) + received)
-
-        response = sockets.handle_frame(action_name, frame_data)
-        print(colored("WS frame response: ", "yellow", attrs=['bold']) + response)
+        response = sockets.handle_frame(action_name, frame_data, clf)
+        print(colored("WS frame response: ", "yellow", attrs=['bold']) + str(response))
 
         if response.socket:
             ws.send(json.dumps({'action': response.socket.action, 'data': response.socket.data}))
@@ -57,7 +62,7 @@ def load_classification_data(data_file: str) -> (list, list):
         data = json.load(f)
 
     values = np.array([x['class_values'] for x in data['items']])
-    labels = np.array([x['label'] for x in data['item']])
+    labels = np.array([x['label'] for x in data['items']])
 
     return values, labels
 

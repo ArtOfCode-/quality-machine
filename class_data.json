@@ -1,3 +1,12 @@
 {
-  "items": []
+  "items": [
+    {
+      "class_values": [1, 2, 3],
+      "label": 0
+    },
+    {
+      "class_values": [4, 5, 6],
+      "label": 1
+    }
+  ]
 }

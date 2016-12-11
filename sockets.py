@@ -18,7 +18,7 @@ class SocketResponse:
         self.chat = chat_response
 
     def __str__(self) -> str:
-        return "SocketResponse<socket={}, chat={}>".format(self.socket, self.chat)
+        return "SocketResponse<socket={}, chat={}>".format(str(self.socket), self.chat)
 
 
 def handle_frame(action: str, data: dict, clf: svm.SVC) -> SocketResponse:
