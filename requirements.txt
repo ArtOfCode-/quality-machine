@@ -1,0 +1,2 @@
+scikit-learn[alldeps]
+websocket-client

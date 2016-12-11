@@ -1,0 +1,3 @@
+[submodule "chatexchange"]
+	path = ChatExchange
+	url = https://github.com/Manishearth/ChatExchange
