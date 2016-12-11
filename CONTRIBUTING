@@ -1,0 +1,12 @@
+Contributions to this project are entirely welcome. A few pointers:
+
+- This project is styled according to PEP8, with an extended line length of 120 characters instead of 80.
+- The code uses type hinting where it makes sense.
+
+When contributing, you should try to follow these conventions where it makes sense. If it doesn't make sense to do so,
+or doing so is impractical, do something as close as possible without making your work or the code too much more
+complicated.
+
+Additionally, the project is licensed under the MIT license. Upon submission of any contribution to this project, You
+grant a non-exclusive, perpetual, royalty-free, irrevocable, worldwide license to your contribution in whole under the
+terms of the MIT license.
