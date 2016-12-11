@@ -21,23 +21,33 @@ class SocketResponse:
         return "SocketResponse<socket={}, chat={}>".format(str(self.socket), self.chat)
 
 
-def handle_frame(action: str, data: dict, clf: svm.SVC) -> SocketResponse:
+def handle_frame(action: str, data: dict) -> SocketResponse:
     """
     Handles a single received message from the websocket.
     :param action: The action received from the websocket.
     :param data: The deserialized data from the websocket frame.
     :param clf: A machine-learning classifier instance.
-    :param client: A ChatClient we can use for talking to chat.
-    :return: None.
+    :return: A SocketResponse for the supercaller to process.
     """
     action_handlers = {
-        'hb': handle_heartbeat
+        'hb': handle_heartbeat,
+        '97-questions-newest': handle_new_question
     }
     if action in action_handlers:
-        return action_handlers[action](data, clf)
+        return action_handlers[action](data)
     else:
         return SocketResponse()
 
 
-def handle_heartbeat(data: dict, clf: svm.SVC) -> SocketResponse:
+def handle_heartbeat(data: dict) -> SocketResponse:
     return SocketResponse(socket_response=SocketMessage("hb", "hb"))
+
+def handle_new_question(data: dict) -> SocketResponse:
+    """
+    Processes a new question, as reported by the websocket.
+    :param data: The deserialized data from the websocket frame.
+    :param clf: A machine-learning classifier instance.
+    :return: A SocketResponse for the supercaller to process.
+    """
+    print(data)
+    return SocketResponse(chat_response="New question posted: [{0}](http://english.stackexchange.com/q/{0})".format(data['id']))

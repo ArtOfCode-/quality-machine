@@ -6,14 +6,19 @@ from termcolor import cprint, colored
 import chat
 from config import Config
 import sockets
+from globalvars import GlobalVars
 
 
 def main():
     config = Config("config.json")
+    GlobalVars.config = config
 
     cprint("Connecting to SE chat...", "blue")
     chat_client = chat.connect()
+    GlobalVars.client = chat_client
     cprint("Success.", "green")
+
+    GlobalVars.control_room = chat_client.get_room(config.get('control_room'))
 
     chat.watch_room(chat_client, config.get('control_room'), chat.process_event, config)
     cprint("Socket watcher started for {}.".format(config.get('control_room')), "blue")
@@ -21,6 +26,7 @@ def main():
     values, labels = load_classification_data(config.get("class_data_file"))
     clf = svm.SVC()
     clf.fit(values, labels)
+    GlobalVars.clf = clf
 
     chat.send_message(config.get('control_room'), "Started with {} classification records loaded. "
                       "Running on {}.".format(len(labels), config.get('location')))
@@ -42,7 +48,7 @@ def main():
         else:
             frame_data = json.loads(json_frame['data'])
 
-        response = sockets.handle_frame(action_name, frame_data, clf)
+        response = sockets.handle_frame(action_name, frame_data)
         print(colored("WS frame response: ", "yellow", attrs=['bold']) + str(response))
 
         if response.socket:
