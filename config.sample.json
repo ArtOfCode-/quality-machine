@@ -2,5 +2,6 @@
   "location": "a value that you should change in config.json",
   "control_room": 49820,
   "command_prefix": "#/",
-  "class_data_file": "class_data.json"
+  "class_data_file": "class_data.json",
+  "repo": "https://github.com/ArtOfCode-/quality-machine"
 }

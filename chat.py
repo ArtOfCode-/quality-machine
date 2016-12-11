@@ -50,6 +50,20 @@ def watch_room(client: Client, room_id: int, event_callback: Callable[[Event, Cl
     rooms[room_id] = room
 
 
+def send_message(room_id: int, message: str) -> None:
+    """
+    Sends a message to the specified room.
+    :param room_id: Integer room ID. Must already be in the rooms list - i.e. already have had watch_room called on it.
+    :param message: Message to send.
+    :return: None.
+    """
+    global config, rooms
+    if room_id in rooms:
+        rooms[room_id].send_message("[ [Quality Machine]({}) ] {}".format(config.get('repo'), message))
+    else:
+        raise ValueError("Invalid room ID.")
+
+
 def process_event(event: Event, chat_client: Client) -> None:
     """
     Given an event from chat, delegate its processing.
