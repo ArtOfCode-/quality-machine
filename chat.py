@@ -1,5 +1,6 @@
 from getpass import getpass
 from typing import Callable
+from termcolor import cprint, colored
 from ChatExchange.chatexchange.client import Client
 from ChatExchange.chatexchange.events import Event
 from config import Config
@@ -79,6 +80,7 @@ def handle_message(data: dict, chat_client: Client) -> None:
     message = data['content']
     command_prefix = config.get('command_prefix')
     if message.startswith(command_prefix):
+        print(colored("Received command: ", "blue", attrs=["bold"]) + message)
         parts = message.split(' ')
         command_name = parts[0][len(command_prefix):]
         args = parts[1:]

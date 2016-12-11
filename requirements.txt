@@ -1,2 +1,3 @@
 scikit-learn[alldeps]
 websocket-client
+termcolor
